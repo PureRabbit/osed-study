@@ -1,11 +1,15 @@
 # Chapter 2: WinDbg and x86 Architecture
 ## Chapter 2.1.1. Program Memory
-### Stack
-<img width="400" height="250" alt="image" src="https://github.com/user-attachments/assets/9212dbe5-1459-4ae2-be34-25bdbcab8dd0" /> 
 
-- **Thread**: Running code from Program Image or from Dynamic Link Libraries (DLLs)
-- **Stack(LIFO)**: contain temporary data area for functions, local variable and program control information when thread is running
+<img width="650" height="450" alt="OSED_Memory drawio" src="https://github.com/user-attachments/assets/45664171-6de7-4e95-839e-143b96a96a99" />
 
+
+
+| Memory | Usage |
+|----------|---------------------|
+|**Thread** | Running code from Program Image or from Dynamic Link Libraries (DLLs) |
+| **Stack(LIFO)** | contain temporary data area for functions, local variable and program control information when thread is running |
+| **Heap(Dynamic)** | dynamic or manual memory allocation, when you want to create a large array or an object that must remain after a function finishes |
 ---
 
 ### Calling conventions
@@ -53,18 +57,14 @@ When a function is called:
 
 ---
 
-### CPU Registers
+## Chapter 2.1.2 CPU Registers
 CPU registers are **tiny, ultra-fast storage areas** inside the processor.  
 On a 32-bit x86 CPU, there are nine important 32-bit registers used to make programs run efficiently.
-
----
 
 ## What Is a Register?
 
 - A *register* stores small amounts of data that the CPU can read and change very quickly.  
 - Registers work much faster than regular memory (RAM).
-
----
 
 ## General Purpose Registers
 
@@ -80,9 +80,8 @@ Each register has a name and a typical use:
 | **ESI**  | Source Index        | Source address for string operations  |
 | **EDI**  | Destination Index   | Destination for string operations     |
 
----
 
-## ESP – The Stack Pointer
+### ESP – The Stack Pointer
 
 - **ESP** keeps track of the *top of the stack* in memory.
 - The stack is used to store data like function calls, return addresses, and local variables.
@@ -90,9 +89,7 @@ Each register has a name and a typical use:
 
 > **A pointer references a specific memory address. ESP always shows the address for the top of the stack—where the next item will be placed or removed.**
 
----
-
-## EBP – The Base Pointer
+### EBP – The Base Pointer
 
 - **EBP** helps functions find their place (stack frame) in the constantly changing stack.
 - When a function starts:
@@ -100,12 +97,11 @@ Each register has a name and a typical use:
   - EBP is set to ESP’s current value, marking the *start of the stack frame*.
   - ESP then allocates the space for the function’s local variables.
 
----
-
-## Subregisters: 16- and 8-bit Parts
+### Subregisters: 16- and 8-bit Parts
 
 - Register names like **EAX**, **EBX**, etc., are for 32 bits.
 - They also have 16- or 8-bit versions (like AX, AH, AL) for working with less data when needed.
 
 ---
+
 
