@@ -97,11 +97,18 @@ Each register has a name and a typical use:
   - EBP is set to ESP’s current value, marking the *start of the stack frame*.
   - ESP then allocates the space for the function’s local variables.
 
+### What is EIP?
+- **EIP (Extended Instruction Pointer)** is a register in x86 processors.
+- It always contains the address of the next instruction to be executed in your program.
+- When you call a function, the **return address** (the value EIP will hold after the function returns) is pushed onto the stack.
+- When the function is done, the CPU pops the return address off the stack into EIP and continues execution from there.
+  
 ### Subregisters: 16- and 8-bit Parts
 
 - Register names like **EAX**, **EBX**, etc., are for 32 bits.
 - They also have 16- or 8-bit versions (like AX, AH, AL) for working with less data when needed.
 
 ---
+
 
 
