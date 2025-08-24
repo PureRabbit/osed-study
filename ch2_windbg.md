@@ -47,47 +47,26 @@ WinDbg provides several commands to **display and inspect memory content** of a 
 
 ### Key Display Commands
 
-- **db**: Display bytes (8 bits)
-  - Example: `db esp`
-  - Shows content byte-by-byte at the address in the ESP register
-- **dw**: Display words (16 bits, 2 bytes)
-  - Example: `dw esp`
-  - Shows two bytes at a time
-- **dd**: Display double-words (32 bits, 4 bytes)
-  - Example: `dd esp`
-  - Shows four bytes at a time
-- **dq**: Display quad-words (64 bits, 8 bytes)
-  - Example: `dq esp`
-  - Shows eight bytes at a time
+| Command | Usage Description                                                         | Example |
+|---------|--------------------------------------------------------------------------|---------|
+| db      | Display bytes and ASCII characters at the specified address              |   <img width="554" height="180" alt="image" src="https://github.com/user-attachments/assets/caabb8e6-f14e-4730-88ef-b3138ead2779" /> |
+| dw      | Display word (2 bytes) values                                            |   <img width="374" height="181" alt="image" src="https://github.com/user-attachments/assets/a1763158-9dfd-45a9-918d-a2db6cd7f746" /> |
+| dd      | Display double-word (4 bytes) values                                     |   <img width="340" height="170" alt="image" src="https://github.com/user-attachments/assets/be896f08-9260-4afb-b285-ffd3a447f193" /> |
+| dq      | Display quad-word (8 bytes) values                                       |   <img width="335" height="176" alt="image" src="https://github.com/user-attachments/assets/1f779514-fbb7-4366-a3a2-6f44d98edbc3" /> |
+| da      | Display memory as ASCII string                                           |         |
+| du      | Display memory as Unicode string                                         |         |
+| dc      | Display double-word values and corresponding ASCII characters            |         |
+| dW      | Display word values and ASCII characters (not to be confused with dw)    |    <img width="485" height="176" alt="image" src="https://github.com/user-attachments/assets/9996f5f1-8c18-42a7-88fd-e5aa3a36821b" /> |
+| df      | Display single-precision floating-point numbers                          |         |
+| dD      | Display double-precision floating-point numbers                          |         |
+| dp      | Display pointer-sized values (like dd or dq, depending on architecture)  |         |
+| dyb     | Display binary and byte values                                           |         |
+| dyd     | Display binary and double-word values                                    |         |
+| poi     | Dereference a pointer from a memory address                             |   <img width="342" height="181" alt="image" src="https://github.com/user-attachments/assets/b558a2cd-b5ff-42de-9844-2afe3fbd36b1" />  |
 
 ### Displaying by Format and Symbol
 
 - You can use registers (like `esp`), explicit memory addresses, or symbol names (like `kernel32!WriteFile`) with these commands.
-
-### Displaying Characters and ASCII
-
-- **dc**: Display DWORDs and ASCII characters together
-- **dW**: Display words and ASCII (don’t confuse with `dw`)
-- ASCII characters appear to the right in these formats for easy reading.
-
-### Specifying Range and Length
-
-- The `L` parameter sets the amount of data to display.
-  - Example: `dd esp L4` (display four DWORDs)
-
-### Composite and Pointer Commands
-
-- **poi**: Dereferences a pointer—useful for following pointers in memory
-  - Example: `dd poi(esp)`
-
-Shows the same memory as a byte, word, and dword.
-
-### Special Formats
-
-- **da**: Displays ASCII strings
-- **du**: Displays Unicode strings
-- **dW**: Shows words and ASCII
-- **dc**: Shows DWORDs and their corresponding ASCII
 
 **Tip:**  
 - Use the appropriate command based on the data format you need to inspect.
