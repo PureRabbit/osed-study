@@ -92,8 +92,8 @@ Little-endian means the least significant part comes first in memory, causing th
 
 
 The hexadecimal value 5A4D corresponds to the ASCII characters 'Z' and 'M'.
-`0x5A` = 'Z'
-`0x4D` = 'M'
+`0x5A` = 'Z' (Higher memory)
+`0x4D` = 'M' (Lower memory)
 So, 5A4D in ASCII is "ZM".
 
 
