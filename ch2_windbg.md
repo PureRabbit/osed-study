@@ -74,3 +74,27 @@ WinDbg provides several commands to **display and inspect memory content** of a 
 - `poi()` lets you read the value pointed to by a pointer (dereference).
 
 These commands are essential for investigating the raw data held in process memory when debugging or reverse engineering applications.
+
+### Reversing Order
+The order appears reversed in the output of the db and dw commands because of endianness. Most Windows systems use little-endian byte order, where the least significant byte is stored at the lowest memory address.
+- db (display bytes) shows memory byte-by-byte, so they are displayed in increasing memory address order.
+- dw (display words) shows 2-byte "word" values, but each word is shown in host (little-endian) order—so the lower byte (stored first in memory) is shown last within each 2-byte group.
+
+**Example for address 1000 containing 0x12 0x34:**
+- `db 1000 L2 → 12 34`    (memory order: low to high)
+- `dw 1000 L1 → 3412`    (host byte order: least significant byte appears last)
+
+  
+Little-endian means the least significant part comes first in memory, causing the "reversal" when grouping bytes into words or larger data types for display.
+
+
+<img width="489" height="49" alt="image" src="https://github.com/user-attachments/assets/052b3aa9-904e-4338-be29-2c93f073e450" />
+
+
+The hexadecimal value 5A4D corresponds to the ASCII characters 'Z' and 'M'.
+`0x5A` = 'Z'
+`0x4D` = 'M'
+So, 5A4D in ASCII is "ZM".
+
+
+
