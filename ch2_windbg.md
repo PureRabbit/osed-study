@@ -96,5 +96,39 @@ The hexadecimal value 5A4D corresponds to the ASCII characters 'Z' and 'M'.
 `0x4D` = 'M' (Lower memory)
 So, 5A4D in ASCII is "ZM".
 
+## Chapter 2.3.3 Dumping Structure from Memory
+
+### Key Concept
+- **Structures**: Collections of fields (ints, pointers, or nested structures) defined in program code.  
+- **Problem**: After code is compiled, structures turn into binary data, making them unreadable.  
+- **Solution in WinDbg**: Use **symbols** and the `dt` (Display Type) command to **reconstruct and dump structures** from memory.  
+- **Benefits**:  
+  - Human-readable names instead of raw memory offsets.  
+  - Ability to explore nested structures.  
+  - Useful in debugging as Windows APIs often use structures.  
+
+### Command Summary Table
+
+| Command | Purpose | Example |
+|---------|---------|---------|
+| `dt Module!Structure` | Displays structure definition (fields, offsets, types) from symbols | `dt ntdll!_TEB` |
+| `dt Module!Structure Address` | Dumps the structure at a **specific memory address** | `dt ntdll!_TEB @$teb` |
+| `dt -r Module!Structure Address` | **Recursive dump**: expands nested structures automatically | `dt -r ntdll!_TEB @$teb` |
+| `dt Module!Structure Address FieldName` | Displays only a **specific field** of a structure | `dt ntdll!_TEB @$teb ThreadLocalStoragePointer` |
+| `?? sizeof(Module!Structure)` | Shows the **size of a structure** in bytes | `?? sizeof(ntdll!_TEB)` |
+
+---
+
+✅ **Tip for Learners:**  
+Always load valid **symbol files** in WinDbg. Without symbols, the `dt` command cannot display meaningful names or layouts.  
+
+
+
+
+
+
+
+
+
 
 
