@@ -117,12 +117,49 @@ So, 5A4D in ASCII is "ZM".
 | `dt Module!Structure Address FieldName` | Displays only a **specific field** of a structure | `dt ntdll!_TEB @$teb ThreadLocalStoragePointer` |
 | `?? sizeof(Module!Structure)` | Shows the **size of a structure** in bytes | `?? sizeof(ntdll!_TEB)` |
 
----
 
 ✅ **Tip for Learners:**  
-Always load valid **symbol files** in WinDbg. Without symbols, the `dt` command cannot display meaningful names or layouts.  
+- Always load valid **symbol files** in WinDbg. Without symbols, the `dt` command cannot display meaningful names or layouts.  
+- ntdll (ntdll.dll) is a core Windows system library that provides the Windows Native API, containing low-level NT kernel functions essential for the operating system’s core functionality. Most applications do not call it directly; instead, it supports system-level operations required by the OS and other system libraries.
+- One thread only has one TEB. We use NTDLL to access the TEB related information.
+- @$teb is a pseudo-register in WinDbg that represents the memory address of the current thread’s TEB (Thread Environment Block)
+- In contrast, a process has one Process Environment Block (PEB) shared by all threads in that process
+- the _TEB structure is defined by the Windows operating system and is always associated with system modules, typically ntdll!_TEB or nt!_TEB. Other application or third-party modules do not define their own versions of the TEB—only the official Windows headers and core modules include it. Attempting to use a different module’s _TEB (such as othermodule!_TEB) would not work, because only the system-provided ones match the actual layout and address used by the OS.
+- Every thread in a Windows application does have a TEB—but it is created and managed by the Windows operating system, not by each application itself. 
 
+## Chapter 2.3.4 ~ 2.3.6.: Writing, Searching, and Editing Memory & Registers
 
+### Key Concepts
+
+- **Writing to Memory:**  
+  - WinDbg lets you directly modify memory in a process using the `edit` commands.  
+  - You can write integers, ASCII, or Unicode strings to any address.
+
+- **Searching Memory:**  
+  - The `search` command (`s`) helps locate values, strings, or patterns within a specified memory range.  
+  - Useful for reverse engineering and exploit development.
+
+- **Inspecting/Editing CPU Registers:**  
+  - The `r` command allows you to view and change CPU register values.  
+  - This is vital for low-level debugging and crafting exploits.
+
+---
+
+### Command Summary Table
+
+| Command                        | Purpose                                                            | Example                                                        |
+|---------------------------------|--------------------------------------------------------------------|----------------------------------------------------------------|
+| `ed Address Value`              | Edit (write) a DWORD value at Address                              | `ed esp 41414141`                                              |
+| `ea Address "String"`           | Edit (write) an ASCII string at Address                            | `ea esp "Hello"`                                               |
+| `eu Address "String"`           | Edit (write) a Unicode string at Address                           | `eu esp "Test"`                                                |
+| `s -d Start Length Pattern`     | Search for a **DWORD** value in memory                             | `s -d 0 L?80000000 41414141`                                   |
+| `s -a Start Length "String"`    | Search for an **ASCII string** in memory                           | `s -a 0 L?80000000 "This program cannot be run in DOS mode"`   |
+| `r`                             | Display all CPU register values                                    | `r`                                                            |
+| `r reg`                         | Display a single register's value                                  | `r ecx`                                                        |
+| `r reg=Value`                   | Set a register to a new value                                      | `r ecx=41414141`                                               |
+
+**Tip for Learners:**  
+Practice modifying different memory locations and register values in a test process. Always understand the effect of each change before applying it, especially with live or critical software.
 
 
 
