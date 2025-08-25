@@ -121,11 +121,47 @@ So, 5A4D in ASCII is "ZM".
 ✅ **Tip for Learners:**  
 - Always load valid **symbol files** in WinDbg. Without symbols, the `dt` command cannot display meaningful names or layouts.  
 - ntdll (ntdll.dll) is a core Windows system library that provides the Windows Native API, containing low-level NT kernel functions essential for the operating system’s core functionality. Most applications do not call it directly; instead, it supports system-level operations required by the OS and other system libraries.
-- One thread only has one TEB. We use NTDLL to access the TEB related information.
-- @$teb is a pseudo-register in WinDbg that represents the memory address of the current thread’s TEB (Thread Environment Block)
-- In contrast, a process has one Process Environment Block (PEB) shared by all threads in that process
+- 1 thread only 1 TEB. Use NTDLL to access the TEB related information.
+- `@$teb` is a pseudo-register in WinDbg that represents the **memory address of the current thread’s TEB (Thread Environment Block)**
+- 1 process has 1 Process Environment Block (PEB) shared by all threads in that process
 - the _TEB structure is defined by the Windows operating system and is always associated with system modules, typically ntdll!_TEB or nt!_TEB. Other application or third-party modules do not define their own versions of the TEB—only the official Windows headers and core modules include it. Attempting to use a different module’s _TEB (such as othermodule!_TEB) would not work, because only the system-provided ones match the actual layout and address used by the OS.
 - Every thread in a Windows application does have a TEB—but it is created and managed by the Windows operating system, not by each application itself. 
+
+```
+TEB (Thread Environment Block)
+│
+├─ NtTib : _NT_TIB
+│ ├─ ExceptionList : _EXCEPTION_REGISTRATION_RECORD
+│ │ ├─ Next : _EXCEPTION_REGISTRATION_RECORD
+│ │ └─ Handler : _EXCEPTION_DISPOSITION
+│ ├─ StackBase : Pointer (stack upper limit)
+│ ├─ StackLimit : Pointer (stack lower limit)
+│ ├─ SubSystemTib : Pointer
+│ ├─ FiberData / Version
+│ ├─ ArbitraryUserPointer
+│ └─ Self : Pointer to _NT_TIB (recursive link)
+│
+├─ EnvironmentPointer : Pointer
+├─ ClientId : _CLIENT_ID
+│ ├─ UniqueProcess : Process ID
+│ └─ UniqueThread : Thread ID
+│
+├─ ActiveRpcHandle : Pointer
+├─ ThreadLocalStoragePointer : Pointer
+├─ ProcessEnvironmentBlock : _PEB
+│ ├─ InheritedAddressSpace
+│ ├─ BeingDebugged
+│ ├─ ImageBaseAddress
+│ ├─ Ldr : _PEB_LDR_DATA
+│ └─ ... (further system & process information)
+│
+├─ LastErrorValue : Integer
+├─ CountOfOwnedCriticalSections : Integer
+└─ ... (other thread-related fields up to offset 0x1000)
+```
+
+In Windows, each TEB (Thread Environment Block) contains a pointer to the PEB (Process Environment Block) because the TEB is thread-specific while the PEB is process-wide. This design allows each thread to quickly access both its own thread-local information (via the TEB) and shared process data (via the PEB) without complex lookups
+
 
 ## Chapter 2.3.4 ~ 2.3.6.: Writing, Searching, and Editing Memory & Registers
 
