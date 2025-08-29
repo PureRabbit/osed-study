@@ -249,6 +249,9 @@ Practice modifying different memory locations and register values in a test proc
 ### Additional 
 - **ole32.dll** is a core Windows system library responsible for OLE (Object Linking and Embedding) functions, which allow applications to embed and link to documents and objects across different programs. This enables features like embedding an Excel spreadsheet in a Word document or inserting images/objects into files. The library manages object creation, data transfer, and inter-process communication in the OLE environment, supporting software interoperability on Windows.
 - for the `ba w 2 03b2c768` command, the number represent the number of byte to watch. It usaully in 1/2/4/8. if you set `ba w 2 03b2c768`, the program will break (pause execution) when any write operation modifies any of the 2 bytes at the memory address 0x03b2c768.
+
+
+
 | Feature                  | Hardware Breakpoint                              | Software Breakpoint                                   |
 |--------------------------|--------------------------------------------------|-------------------------------------------------------|
 | How it works             | Uses special CPU debug registers to monitor specific addresses or instructions | Modifies program code in memory with a special breakpoint instruction (e.g., INT 3 on x86) |
