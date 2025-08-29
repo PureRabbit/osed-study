@@ -223,7 +223,7 @@ Practice modifying different memory locations and register values in a test proc
 
 ---
 
-## WinDbg Program Control Commands Table
+### WinDbg Program Control Commands Table
 
 | Command                  | Description                                               | Example Use                                |
 |--------------------------|----------------------------------------------------------|--------------------------------------------|
@@ -233,7 +233,8 @@ Practice modifying different memory locations and register values in a test proc
 | `bl`                     | List all breakpoints and their status                    | `bl`                                       |
 | `be [num]`               | Enable breakpoint by number                              | `be 0`                                     |
 | `bd [num]`               | Disable breakpoint by number                             | `bd 0`                                     |
-| `bc [num|*]`             | Clear a breakpoint by number or all (`*`)                | `bc 1` / `bc *`                            |
+| `bc [num|*] `            | Clear a breakpoint by number or all (`*`)                | `bc 1` / `bc *`                            |
+| `lm`                     | list all modules / `lm m [module]`                       | `lm / lm m ole32 `                         |
 | `g`                      | Resume execution                                         | `g`                                        |
 | `p`                      | Step over (next instruction, skip calls)                 | `p`                                        |
 | `t`                      | Step into (next instruction, enter calls)                | `t`                                        |
@@ -245,6 +246,19 @@ Practice modifying different memory locations and register values in a test proc
 
 *This table uses real WinDbg command syntax as referenced from community and official Quick Reference sources.*[web:6][web:9]
 
+### Additional 
+- **ole32.dll** is a core Windows system library responsible for OLE (Object Linking and Embedding) functions, which allow applications to embed and link to documents and objects across different programs. This enables features like embedding an Excel spreadsheet in a Word document or inserting images/objects into files. The library manages object creation, data transfer, and inter-process communication in the OLE environment, supporting software interoperability on Windows.
+- for the `ba w 2 03b2c768` command, the number represent the number of byte to watch. It usaully in 1/2/4/8. if you set `ba w 2 03b2c768`, the program will break (pause execution) when any write operation modifies any of the 2 bytes at the memory address 0x03b2c768.
+| Feature                  | Hardware Breakpoint                              | Software Breakpoint                                   |
+|--------------------------|--------------------------------------------------|-------------------------------------------------------|
+| How it works             | Uses special CPU debug registers to monitor specific addresses or instructions | Modifies program code in memory with a special breakpoint instruction (e.g., INT 3 on x86) |
+| Quantity Limit           | Limited (usually 2-4 per CPU/thread on x86/x64)  | Essentially unlimited (restricted only by memory size)|
+| Location restriction     | Works in any memory area, including read-only/flash | Only works in writable memory (usually RAM), not in ROM/flash |
+| Can break on data access | Yes (read, write, or execute access)             | Normally only on instruction execution                |
+| Performance              | Very fast, negligible overhead                   | Slightly slower, incurs overhead due to code patching |
+| Typical use cases        | Tracking memory reads/writes, code in flash, rare bug conditions | General debugging, multiple breakpoints on code       |
+| Drawbacks                | Very limited in number; may require special permissions | Cannot be used on code in ROM or flash; risks leaving patched code if broken debugger session |
+| Example WinDbg command   | `ba w 4 0x12345678`                              | `bp mymodule!myfunction`                              |
 
 
 
