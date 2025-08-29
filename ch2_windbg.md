@@ -197,7 +197,53 @@ In Windows, each TEB (Thread Environment Block) contains a pointer to the PEB (P
 **Tip for Learners:**  
 Practice modifying different memory locations and register values in a test process. Always understand the effect of each change before applying it, especially with live or critical software.
 
+## Chapter 2.3.4 ~ 2.3.6.: WinDbg Program Execution Control – Summary
 
+**WinDbg** uses breakpoints and step commands to control program execution for debugging purposes. There are two primary breakpoint types: **software (bp)**, which temporarily modifies program code, and **hardware (ba)**, which uses CPU debug registers to monitor memory and execution. Stepping commands allow execution to proceed instruction-by-instruction, either diving into or stepping over function calls. Breakpoints can be automated and made conditional, making WinDbg a powerful tool for code analysis.
+
+### Key Concepts
+
+### Breakpoints
+- **Software Breakpoints (`bp`)**: Set by the debugger at specific locations; unlimited in number; modifies code at runtime.
+- **Hardware Breakpoints (`ba`)**: Set by CPU, monitor read/write/execute access at memory addresses; limited by CPU debug registers; does not modify code.
+- **Unresolved Breakpoints (`bu`)**: For functions not yet loaded; become active when the module loads.
+- **Breakpoint Management**: Commands exist to list, enable, disable, or clear breakpoints.
+
+### Stepping Through Code
+- **Step Over (`p`)**: Executes the next instruction but skips over function calls.
+- **Step Into (`t`)**: Executes the next instruction and dives into function calls.
+- **Step Out (`gu`)**: Runs until current function returns.
+- **Continue (`g`)**: Runs until the next breakpoint or exception.
+- **Step to Return (`pt`)**: Executes until the current function returns.
+- **Step to Branch (`ph`)**: Executes until a branch instruction (call/ret/jmp).
+
+### Conditional and Automated Breakpoints
+- **Breakpoint Actions**: Automate logger or actions when a breakpoint is hit, e.g. print data, run scripts.
+- **Conditional Breakpoints**: Halt only when certain conditions are true using `.if` syntax in breakpoint command[web:6].
+
+---
+
+## WinDbg Program Control Commands Table
+
+| Command                  | Description                                               | Example Use                                |
+|--------------------------|----------------------------------------------------------|--------------------------------------------|
+| `bp [location]`          | Set a software breakpoint                                | `bp kernel32!WriteFile`                    |
+| `ba [type] [size] [addr]`| Set a hardware/data breakpoint (e=exec, r=read, w=write) | `ba w 4 0x12345678`                        |
+| `bu [symbol]`            | Set unresolved breakpoint (module not loaded)            | `bu ole32!WriteStringStream`               |
+| `bl`                     | List all breakpoints and their status                    | `bl`                                       |
+| `be [num]`               | Enable breakpoint by number                              | `be 0`                                     |
+| `bd [num]`               | Disable breakpoint by number                             | `bd 0`                                     |
+| `bc [num|*]`             | Clear a breakpoint by number or all (`*`)                | `bc 1` / `bc *`                            |
+| `g`                      | Resume execution                                         | `g`                                        |
+| `p`                      | Step over (next instruction, skip calls)                 | `p`                                        |
+| `t`                      | Step into (next instruction, enter calls)                | `t`                                        |
+| `pt`                     | Step to next return                                      | `pt`                                       |
+| `ph`                     | Step to next branch (call/ret/jmp)                       | `ph`                                       |
+| `gu`                     | Step out (run until function returns)                    | `gu`                                       |
+| `.if/.else`              | Use conditionals for breakpoint actions                  | `bp ... ".if (condition) {g} .else {break};"` |
+| `[command] [{args}] ; ...` | Automate command(s) when breakpoint hits                | `bp ... ".printf \"Value: %p\", @eax; g"`  |
+
+*This table uses real WinDbg command syntax as referenced from community and official Quick Reference sources.*[web:6][web:9]
 
 
 
