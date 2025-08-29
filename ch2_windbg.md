@@ -197,7 +197,9 @@ In Windows, each TEB (Thread Environment Block) contains a pointer to the PEB (P
 **Tip for Learners:**  
 Practice modifying different memory locations and register values in a test process. Always understand the effect of each change before applying it, especially with live or critical software.
 
-## Chapter 2.3.4 ~ 2.3.6.: WinDbg Program Execution Control – Summary
+---
+
+## Chapter 2.4.1 ~ 2.4.3.: WinDbg Program Execution Control – Summary
 
 **WinDbg** uses breakpoints and step commands to control program execution for debugging purposes. There are two primary breakpoint types: **software (bp)**, which temporarily modifies program code, and **hardware (ba)**, which uses CPU debug registers to monitor memory and execution. Stepping commands allow execution to proceed instruction-by-instruction, either diving into or stepping over function calls. Breakpoints can be automated and made conditional, making WinDbg a powerful tool for code analysis.
 
@@ -265,6 +267,24 @@ Practice modifying different memory locations and register values in a test proc
 
 
 
+## Chapter 2.4.4 :Key Concept: Stepping Through Code in WinDbg
+
+Stepping through code is essential in reverse engineering and debugging to see exactly how a program executes, line by line or instruction by instruction. WinDbg provides commands that let you control program flow at this granular level, allowing you to skip over or dive into functions to understand their actual behavior.
+
+---
+
+## Command Summary Table
+
+| Command   | Name/Action             | What It Does                                                                                 | When to Use                             |
+|-----------|-------------------------|---------------------------------------------------------------------------------------------|-----------------------------------------|
+| `p`       | Step Over               | Executes the next instruction; if it’s a function call, runs the whole function and stops after it returns | When you want to skip function details  |
+| `t`       | Step Into               | Executes the next instruction; if it’s a function call, goes into the function, stopping at its first instruction | When you want to see inside the function|
+| `pt`      | Step to Return          | Executes instructions until a `ret` (return) instruction is hit in the current function      | To quickly jump out of the current function |
+| `ph`      | Step to Branch          | Runs until any branch (call, jump, return, etc.) instruction is reached                      | To fast-forward to the next branch      |
+| `g`       | Go (Continue)           | Runs the program until the next breakpoint or exception                                      | To resume normal execution              |
+| `gu`      | Step Out                | Runs until current function returns                                                          | When you’re done examining a function   |
+
+---
 
 
 
